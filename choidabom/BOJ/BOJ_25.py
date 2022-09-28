@@ -13,3 +13,7 @@ def factorial(n):
         return 1
 
 print(factorial(n))
+
+# for i in range(n, 1, -1):
+#     factorial = i * (i-1)
+        
