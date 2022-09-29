@@ -1,41 +1,70 @@
-# 10971: 외판원 순회 2
-# 각 도시간에 이동하는데 드는 비용은 행렬 W[i][j]형태
+# 14888: 연산자 끼워넣기
 
+# 준호오빠 코드
 import sys
 from itertools import permutations
 sys.stdin = open('choidabom/BOJ/input.txt', 'r')
-N = int(sys.stdin.readline()) # 도시의 수 N
+N = int(sys.stdin.readline().strip())
+num_list = [0] * N
+num_list = list(map(int, sys.stdin.readline().split()))
+operator = [0] * (N-1)
+operator = list(map(int, sys.stdin.readline().split()))
 
-# 도시의 수만큼 도시 리스트로 나타내기
-course_list = []
-for i in range(N):
-    course_list.append(i)
+# 인덱스 갯수에 따라 연산자 넣어주기
+oper_list = [0] * (N-1)
+num = 0
+for i in range(4):
+    # operator[i] 요소의 개수만큼 반복문이 돌아서 리스트에 넣어줌
+    for j in range(operator[i]):
+        oper_list[num] = i
+        num += 1
 
-# 도시의 수만큼 갈 수 있는 경로 순열로 나타내기
-cases = permutations(course_list, N)
-# print(cases)
+# 연산자의 가능한 순열(중복값 제거)
+cases = list(set(permutations(oper_list, N-1)))
+print(cases)
 
-# W[i][j]는 도시 i에서 도시 j로 가기 위한 비용
-W = list(sys.stdin.readline().split() for i in range(N))
-# print(W)
-
-min_cost = 10000000
-
+minimum = 1000001000
+maximum = -1000001000
 for case in cases:
-    cost = 0
-    check = True
-    case = list(case)
-    # print(case)
-    for i in range(len(case)):
-        if int(W[case[i-1]][case[i]]) == 0:
-            check = False
-            break
-        else:
-            cost += int(W[case[i-1]][case[i]])
-    if check == True:
-        if min_cost > cost:
-            min_cost = cost
-    
-print(min_cost)
+    calc = num_list[0]
+    for i in range(N-1):
+        if case[i] == 0:
+            calc = calc + num_list[i+1]
+        if case[i] == 1:
+            calc = calc - num_list[i+1]
+        elif case[i] == 2:
+            calc = calc * num_list[i+1] 
+        elif case[i] == 3:
+            if calc < 0:
+                calc = -(abs(calc)//num_list[i+1])
+            else:
+                calc = calc // num_list[i+1]
+
+    if calc < minimum:
+        minimum = calc
+    if calc > maximum:
+        maximum = calc
+
+print(maximum, minimum)   
+
+# oper_list = []
+# for idx in operator:
+#     if idx == 0:
+#         for j in range(len(N-1)):
+#             oper_list.append(operator[j])
+#     elif idx == 1:
+#         for j in range(len(N-1)):
+#             oper_list.append(operator[j])
+#     elif idx == 2:
+#         for j in range(len(N-1)):
+#             oper_list.append(operator[j])
+#     else:
+#         for j in range(len(N-1)):
+#             oper_list.append(operator[j])
 
 
+
+# print(N)
+# print(num_list)
+# print(operator)
+# print(oper_list)
